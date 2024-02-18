@@ -14,6 +14,10 @@
 		DD2206F92B8234F0002FD181 /* AITextAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2206F82B8234F0002FD181 /* AITextAppTests.swift */; };
 		DD2207032B8234F0002FD181 /* AITextAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2207022B8234F0002FD181 /* AITextAppUITests.swift */; };
 		DD2207052B8234F0002FD181 /* AITextAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2207042B8234F0002FD181 /* AITextAppUITestsLaunchTests.swift */; };
+		DD2207122B8235DE002FD181 /* RecordingItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2207112B8235DE002FD181 /* RecordingItemView.swift */; };
+		DD2207142B823BFE002FD181 /* NewRecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2207132B823BFE002FD181 /* NewRecordingView.swift */; };
+		DD2207172B823EFC002FD181 /* AVAudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2207162B823EFC002FD181 /* AVAudioManager.swift */; };
+		DD22071A2B8249B1002FD181 /* StopWatchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2207192B8249B1002FD181 /* StopWatchManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +48,11 @@
 		DD2206FE2B8234F0002FD181 /* AITextAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AITextAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD2207022B8234F0002FD181 /* AITextAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AITextAppUITests.swift; sourceTree = "<group>"; };
 		DD2207042B8234F0002FD181 /* AITextAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AITextAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		DD2207112B8235DE002FD181 /* RecordingItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingItemView.swift; sourceTree = "<group>"; };
+		DD2207132B823BFE002FD181 /* NewRecordingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewRecordingView.swift; sourceTree = "<group>"; };
+		DD2207162B823EFC002FD181 /* AVAudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVAudioManager.swift; sourceTree = "<group>"; };
+		DD2207182B8246E1002FD181 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		DD2207192B8249B1002FD181 /* StopWatchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopWatchManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,8 +103,11 @@
 		DD2206E62B8234ED002FD181 /* AITextApp */ = {
 			isa = PBXGroup;
 			children = (
+				DD2207182B8246E1002FD181 /* Info.plist */,
 				DD2206E72B8234ED002FD181 /* AITextAppApp.swift */,
-				DD2206E92B8234ED002FD181 /* ContentView.swift */,
+				DD2207152B823E8D002FD181 /* View */,
+				DD2207162B823EFC002FD181 /* AVAudioManager.swift */,
+				DD2207192B8249B1002FD181 /* StopWatchManager.swift */,
 				DD2206EB2B8234F0002FD181 /* Assets.xcassets */,
 				DD2206ED2B8234F0002FD181 /* Preview Content */,
 			);
@@ -125,6 +137,16 @@
 				DD2207042B8234F0002FD181 /* AITextAppUITestsLaunchTests.swift */,
 			);
 			path = AITextAppUITests;
+			sourceTree = "<group>";
+		};
+		DD2207152B823E8D002FD181 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DD2206E92B8234ED002FD181 /* ContentView.swift */,
+				DD2207112B8235DE002FD181 /* RecordingItemView.swift */,
+				DD2207132B823BFE002FD181 /* NewRecordingView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -258,7 +280,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD2206EA2B8234ED002FD181 /* ContentView.swift in Sources */,
+				DD22071A2B8249B1002FD181 /* StopWatchManager.swift in Sources */,
 				DD2206E82B8234ED002FD181 /* AITextAppApp.swift in Sources */,
+				DD2207122B8235DE002FD181 /* RecordingItemView.swift in Sources */,
+				DD2207172B823EFC002FD181 /* AVAudioManager.swift in Sources */,
+				DD2207142B823BFE002FD181 /* NewRecordingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -425,6 +451,9 @@
 				DEVELOPMENT_TEAM = X55V6FTF2T;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AITextApp/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Please allow us to make recordings.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -454,6 +483,9 @@
 				DEVELOPMENT_TEAM = X55V6FTF2T;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AITextApp/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Please allow us to make recordings.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
