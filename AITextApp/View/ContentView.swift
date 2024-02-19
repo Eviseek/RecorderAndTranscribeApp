@@ -37,7 +37,7 @@ struct ContentView: View {
             .padding(.horizontal, 15)
             
             Button {
-                avAudioManager.playRecording("NewRecording1")
+                avAudioManager.playRecording(for: "")
             } label: {
                 Image(systemName: "circle.fill")
                     .resizable()
@@ -48,8 +48,11 @@ struct ContentView: View {
             
             VStack {
                 Button {
-                    avAudioManager.startRecording(title: "NewRecording1")
-                    recordingSheetPresented.toggle()
+                    Task {
+                        await avAudioManager.metadata()
+                    }
+//                    avAudioManager.startRecording()
+//                    recordingSheetPresented.toggle()
                 } label: {
                     ZStack {
                         Circle()
@@ -73,6 +76,11 @@ struct ContentView: View {
             .background(Color(.systemGray6))
         }
     }
+    
+    func doSomething() async {
+        await avAudioManager.metadata()
+    }
+    
 }
 
 #Preview {

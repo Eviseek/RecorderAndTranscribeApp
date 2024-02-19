@@ -18,6 +18,7 @@
 		DD2207142B823BFE002FD181 /* NewRecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2207132B823BFE002FD181 /* NewRecordingView.swift */; };
 		DD2207172B823EFC002FD181 /* AVAudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2207162B823EFC002FD181 /* AVAudioManager.swift */; };
 		DD22071A2B8249B1002FD181 /* StopWatchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD2207192B8249B1002FD181 /* StopWatchManager.swift */; };
+		DD3327D32B83E596008C573F /* Recording.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD3327D22B83E596008C573F /* Recording.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		DD2207162B823EFC002FD181 /* AVAudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVAudioManager.swift; sourceTree = "<group>"; };
 		DD2207182B8246E1002FD181 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		DD2207192B8249B1002FD181 /* StopWatchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopWatchManager.swift; sourceTree = "<group>"; };
+		DD3327D22B83E596008C573F /* Recording.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recording.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +107,7 @@
 			children = (
 				DD2207182B8246E1002FD181 /* Info.plist */,
 				DD2206E72B8234ED002FD181 /* AITextAppApp.swift */,
+				DD3327D42B83E59D008C573F /* Model */,
 				DD2207152B823E8D002FD181 /* View */,
 				DD2207162B823EFC002FD181 /* AVAudioManager.swift */,
 				DD2207192B8249B1002FD181 /* StopWatchManager.swift */,
@@ -147,6 +150,14 @@
 				DD2207132B823BFE002FD181 /* NewRecordingView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		DD3327D42B83E59D008C573F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				DD3327D22B83E596008C573F /* Recording.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -284,6 +295,7 @@
 				DD2206E82B8234ED002FD181 /* AITextAppApp.swift in Sources */,
 				DD2207122B8235DE002FD181 /* RecordingItemView.swift in Sources */,
 				DD2207172B823EFC002FD181 /* AVAudioManager.swift in Sources */,
+				DD3327D32B83E596008C573F /* Recording.swift in Sources */,
 				DD2207142B823BFE002FD181 /* NewRecordingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
