@@ -10,34 +10,30 @@ import AVFoundation
 
 class AVAudioManager: ObservableObject {
     
-    var audioSession: AVAudioSession?
-    var audioRecorder: AVAudioRecorder?
+    static let shared = AVAudioManager()
     
-    var audioPlayer: AVAudioPlayer = AVAudioPlayer()
+    private var audioSession: AVAudioSession?
+    private var audioRecorder: AVAudioRecorder?
     
-    //
-    let defaults = UserDefaults.standard
-    var numberOfRecordings = 1
+    private var audioPlayer: AVAudioPlayer = AVAudioPlayer()
     
-    var recordings = [Recording]()
+    private var audioState: AudioState = .playing
     
-    init() {
-        
-        updateNumberOfRecordings()
+    private init() {
         
         AVAudioApplication.requestRecordPermission { granted in
             if granted {
-              //  self.setupAudioSession()
-              //  self.setupRecorder()
                 print("granted")
             } else {
                 // not
                 print("!!!! error, permissions not granted")
             }
         }
+        
     }
     
     private func setupAudioSession() { //would it be better to do throws func?
+        
         do {
             let audioSession = AVAudioSession.sharedInstance()
             try audioSession.setCategory(.playAndRecord, mode: .default)
@@ -46,12 +42,14 @@ class AVAudioManager: ObservableObject {
             // error
             print("!!!! something went wrong, setupAudioSession")
         }
+        
     }
     
-    private func setupRecorder() { //would it be better to do throws func?
+    private func setupRecorder(fileName: String) { //would it be better to do throws func?
+        
         let recordingSettings: [String : Any] = [AVFormatIDKey: kAudioFormatMPEG4AAC, AVSampleRateKey: 12000, AVNumberOfChannelsKey: 1, AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue]
         let documentPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let audioFilename = documentPath.appendingPathComponent("MyRecording.m4a")
+        let audioFilename = documentPath.appendingPathComponent("\(fileName).m4a")
         
         print("this is my path \(audioFilename)")
         
@@ -63,24 +61,53 @@ class AVAudioManager: ObservableObject {
             //error
             print("!!!! something went wrong, setupRecorder")
         }
+        
     }
     
-    func startRecording() {
+    func startRecording(_ fileName: String) {
+        
         print("starting recording")
         setupAudioSession()
-        setupRecorder()
+        setupRecorder(fileName: fileName)
         audioRecorder?.record()
-    }
-    
-    func stopRecording() {
-        print("stopping recording")
-        audioRecorder?.stop()
-       // generateRecordingInfo(<#T##fileName: String##String#>)
-    }
-    
-    func playRecording(for fileName: String) {
         
-        let url = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first)?.appendingPathComponent("MyRecording.m4a")
+    }
+    
+    func stopRecording(completion: (URL?) -> ()) {
+        
+        print("stopping recording")
+        let url  = audioRecorder?.url
+        audioRecorder?.stop()
+        completion(url)
+        
+    }
+    
+    func pauseRecording() {
+        
+        print("should pause")
+        audioPlayer.pause()
+        
+    }
+    
+    func playOrResumeRecording(for fileName: String, _ url: URL? = nil, state: AudioState) {
+        
+        if state == .start {
+            playRecording(for: fileName)
+        } else if state == .paused {
+            resumeRecording()
+        }
+    
+    }
+    
+    func resumeRecording() {
+        audioPlayer.play()
+    }
+    
+    private func playRecording(for fileName: String, _ url: URL? = nil) {
+        
+        print("should play")
+        
+        let url = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first)?.appendingPathComponent("\(fileName)")
         guard let url = url else {
             print("failed to get url")
             return
@@ -102,35 +129,48 @@ class AVAudioManager: ObservableObject {
         
     }
     
-    func getGenericFileName() -> String {
+    func deleteRecording(fileName: String, _ url: URL? = nil, completion: (Bool) -> ()) {
         
-        return ("NewRecording\(getNumberOfRecordings())")
+        print("should delete")
         
-    }
-    
-    private func updateNumberOfRecordings() {
-        
-        numberOfRecordings += 1
-        defaults.set("numberOfRecordings", forKey: String(numberOfRecordings))
-        
-    }
-    
-    private func getNumberOfRecordings() -> Int {
-        return defaults.value(forKey: "numberOfRecordings") as? Int ?? 0
-    }
-    
-    func generateRecordingInfo(_ fileName: String) {
-        
-        let url = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first)?.appendingPathComponent("MyRecording.m4a")
+        let url = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first)?.appendingPathComponent("\(fileName)")
         guard let url = url else {
             print("failed to get url")
+            completion(false)
             return
         }
         
         do {
+            
+            let fileManager = FileManager.default
+            try fileManager.removeItem(at: url)
+            
+            completion(true)
+            
+        } catch {
+            
+            print("!!! something went wrong, deleteRecording()")
+            completion(false)
+            
+        }
+        
+        completion(false)
+        
+    }
+
+    
+    func getRecordingInformation(_ url: URL) -> Recording? {
+        
+        do {
+            // Get filename
+            let fileName = url.lastPathComponent
+            
+            // Generate title
+            var title = fileName.toTitle()
+            
             // Get creation date
             let fileAttributes = try FileManager.default.attributesOfItem(atPath: url.path(percentEncoded: false)) //false?
-            guard let creationDate = fileAttributes[.creationDate] as? Date else { return }
+            guard let creationDate = fileAttributes[.creationDate] as? Date else { return nil }
             print("Recording Creation Date: \(creationDate)")
             
             
@@ -139,20 +179,14 @@ class AVAudioManager: ObservableObject {
             let durationInSeconds = Double(audioFile.length) / audioFile.fileFormat.sampleRate
             print("Recording Duration: \(durationInSeconds) seconds")
             
-            createAndAppendRecording(fileName: fileName, creationDate: creationDate, durationSecs: durationInSeconds)
+            // And finally, return information
+            return Recording(title: title, fileName: fileName, date: creationDate, durationSec: durationInSeconds, url: url)
             
         } catch {
             print("something went wrong")
         }
         
-    }
-    
-    func createAndAppendRecording(fileName: String, creationDate: Date, durationSecs: Double) {
-        
-        let title = fileName.replacingOccurrences(of: "-", with: " ")
-        let recording = Recording(title: title, fileName: fileName, date: creationDate, durationSec: durationSecs)
-        
-        recordings.append(recording)
+        return nil
         
     }
     

@@ -10,12 +10,14 @@ import SwiftUI
 @main
 struct AITextAppApp: App {
     
-    @StateObject var avAudioManager = AVAudioManager()
+    @StateObject var avAudioManager = AVAudioManager.shared
+    @StateObject var recordingsManager = RecordingsManager()
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            AllRecordingsView()
                 .environmentObject(avAudioManager)
+                .environmentObject(recordingsManager)
         }
     }
 }

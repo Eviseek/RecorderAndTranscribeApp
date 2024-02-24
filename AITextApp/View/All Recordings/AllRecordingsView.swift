@@ -5,13 +5,19 @@
 //  Created by Eva Chlpikova on 18.02.2024.
 //
 
+//TODO: close all cells when another opened -> only one cell at the time should be opened
+
 import SwiftUI
 
-struct ContentView: View {
+struct AllRecordingsView: View {
     
     @State private var recordingSheetPresented = false
+    @State private var shouldRefresh = false
     
     @EnvironmentObject var avAudioManager: AVAudioManager
+    @EnvironmentObject var recordingsManager: RecordingsManager
+    
+    @StateObject var recordingCellsManager = RecordingCellsManager()
     
     var body: some View {
         VStack {
@@ -25,34 +31,21 @@ struct ContentView: View {
                 Divider()
                 
                 List {
-                    RecordingItemView()
-                    RecordingItemView()
-                    RecordingItemView()
-                    RecordingItemView()
-                    RecordingItemView()
+                    ForEach(recordingsManager.recordings, id: \.fileName) { recording in
+                        RecordingItemView(recording: recording, recordingCell: RecordingCell.TEST_DATA[0])
+                       // append()
+                    }
                 }
                 .padding(.horizontal, -15)
                 .listStyle(.inset)
             }
             .padding(.horizontal, 15)
-            
-            Button {
-                avAudioManager.playRecording(for: "")
-            } label: {
-                Image(systemName: "circle.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 100, height: 100)
-            }
 
             
             VStack {
                 Button {
-                    Task {
-                        await avAudioManager.metadata()
-                    }
-//                    avAudioManager.startRecording()
-//                    recordingSheetPresented.toggle()
+                    avAudioManager.startRecording(recordingsManager.getGenericFileName())
+                    recordingSheetPresented.toggle()
                 } label: {
                     ZStack {
                         Circle()
@@ -67,7 +60,7 @@ struct ContentView: View {
                     }
                 }
                 .sheet(isPresented: $recordingSheetPresented) {
-                    NewRecordingView()
+                    NewRecordingView(title: recordingsManager.getGenericFileName().toTitle())
                         .presentationDetents([.height(150)])
                 }
                 .padding(.top, 15)
@@ -77,13 +70,14 @@ struct ContentView: View {
         }
     }
     
-    func doSomething() async {
-        await avAudioManager.metadata()
+    func append() {
+        recordingCellsManager.appendNewCell(recordingCell: RecordingCell.TEST_DATA[0])
     }
     
 }
 
 #Preview {
-    ContentView()
-        .environmentObject(AVAudioManager())
+    AllRecordingsView()
+        .environmentObject(AVAudioManager.shared)
+        .environmentObject(RecordingsManager())
 }

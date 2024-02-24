@@ -9,43 +9,60 @@ import SwiftUI
 
 struct RecordingItemView: View {
     
+    @EnvironmentObject var recordingsManager: RecordingsManager
+    
+    @State private var showUnwraped = false
+    
+    let recording: Recording
+  
+    let recordingCell: RecordingCell
+    
+   // @Binding var shouldRefresh: Bool
+    
     var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("New Recording 1")
-                    .font(.system(size: 16))
-                    .bold()
-                Text("1. 2. 2024")
-                    .font(.system(size: 14))
-                    .foregroundStyle(.gray)
-            }
-            
-            Spacer()
-            
-            VStack(alignment: .trailing, spacing: 4) {
-                Button {
-                    //TODO: transcribe view
-                } label: {
-                    HStack {
-//                        Image(systemName: "text.quote")
-//                            .resizable()
-//                            .scaledToFit()
-//                            .frame(width: 15, height: 15)
-                        Text("Transcribe")
-                            .foregroundStyle(.blue)
+            if !showUnwraped {
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(recording.title)
                             .font(.system(size: 16))
+                            .bold()
+                        Text(recording.date.toStrDate())
+                            .font(.system(size: 14))
+                            .foregroundStyle(.gray)
+                    }
+                    
+                    Spacer()
+                    
+                    VStack(alignment: .trailing, spacing: 4) {
+                        Button {
+                            //TODO: transcribe view
+                        } label: {
+                            Text("Transcribe")
+                                .foregroundStyle(.blue)
+                                .font(.system(size: 16))
+                        }
+                        
+                        Text(recording.durationSec.toHours())
+                            .font(.system(size: 14))
+                            .foregroundStyle(.gray)
                     }
                 }
-
-                Text("25:10")
-                    .font(.system(size: 14))
-                    .foregroundStyle(.gray)
+                .onTapGesture {
+                    showUnwraped.toggle()
+                    refreshArray()
+                }
+            } else {
+                RecordingItemUnwrapedView(recording: recording)
             }
-        }
-        //.padding(.horizontal, 10)
     }
+
+    func refreshArray() {
+        recordingsManager.refreshArray()
+    }
+    
 }
 
 #Preview {
-    RecordingItemView()
+    RecordingItemView(recording: Recording.TEST_DATA[0], recordingCell: RecordingCell.TEST_DATA[0])
+        .environmentObject(RecordingsManager())
 }

@@ -10,12 +10,17 @@ import SwiftUI
 struct NewRecordingView: View {
     
     @EnvironmentObject var avAudioManager: AVAudioManager
+    @EnvironmentObject var recordingsManager: RecordingsManager
     
     @ObservedObject var stopwatchManager = StopWatchManager()
     
+    @Environment (\.dismiss) var dismiss
+    
+    var title: String
+    
     var body: some View {
         VStack {
-            Text("New Recording 1")
+            Text(title)
                 .font(.title3)
                 .bold()
                 .padding(.top, 30)
@@ -26,8 +31,11 @@ struct NewRecordingView: View {
                 .padding(.bottom, 15)
             
             Button {
-                avAudioManager.stopRecording()
+                avAudioManager.stopRecording { url in
+                    recordingsManager.appendNewRecording(url: url)
+                }
                 stopwatchManager.stopTimer()
+                dismiss()
             } label: {
                 ZStack {
                     Circle()
@@ -47,6 +55,7 @@ struct NewRecordingView: View {
 }
 
 #Preview {
-    NewRecordingView()
-        .environmentObject(AVAudioManager())
+    NewRecordingView(title: "New Recording 1")
+        .environmentObject(AVAudioManager.shared)
+        .environmentObject(RecordingsManager())
 }
