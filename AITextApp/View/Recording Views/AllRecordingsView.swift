@@ -5,8 +5,6 @@
 //  Created by Eva Chlpikova on 18.02.2024.
 //
 
-//TODO: close all cells when another opened -> only one cell at the time should be opened
-
 import SwiftUI
 
 struct AllRecordingsView: View {
@@ -31,9 +29,8 @@ struct AllRecordingsView: View {
                 Divider()
                 
                 List {
-                    ForEach(recordingsManager.recordings, id: \.fileName) { recording in
-                        RecordingItemView(recording: recording, recordingCell: RecordingCell.TEST_DATA[0])
-                       // append()
+                    ForEach(recordingsManager.recordingCells, id: \.id) { recordingCell in
+                        RecordingItemView(cellFileName: recordingCell.recording.fileName)
                     }
                 }
                 .padding(.horizontal, -15)
@@ -68,10 +65,6 @@ struct AllRecordingsView: View {
             .frame(maxWidth: .infinity)
             .background(Color(.systemGray6))
         }
-    }
-    
-    func append() {
-        recordingCellsManager.appendNewCell(recordingCell: RecordingCell.TEST_DATA[0])
     }
     
 }

@@ -12,7 +12,7 @@ struct NewRecordingView: View {
     @EnvironmentObject var avAudioManager: AVAudioManager
     @EnvironmentObject var recordingsManager: RecordingsManager
     
-    @ObservedObject var stopwatchManager = StopWatchManager()
+    @ObservedObject var stopwatchManager = TimerManager()
     
     @Environment (\.dismiss) var dismiss
     

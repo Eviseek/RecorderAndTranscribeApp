@@ -76,7 +76,7 @@ class AVAudioManager: ObservableObject {
     func stopRecording(completion: (URL?) -> ()) {
         
         print("stopping recording")
-        let url  = audioRecorder?.url
+        let url = audioRecorder?.url
         audioRecorder?.stop()
         completion(url)
         

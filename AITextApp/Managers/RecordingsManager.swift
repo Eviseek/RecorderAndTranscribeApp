@@ -16,6 +16,8 @@ class RecordingsManager: ObservableObject {
     
  //   @Published private var shouldBeOpened = false
     
+    @Published var recordingCells = [RecordingCell]()
+    
     init() {
         
         recordings = Recording.TEST_DATA
@@ -23,6 +25,7 @@ class RecordingsManager: ObservableObject {
         numberOfRecordings = getNumberOfRecordings()
         fetchAllRecordings()
         
+        createRecordingCells(recordings: recordings)
     }
     
     private func fetchAllRecordings() {
@@ -61,7 +64,8 @@ class RecordingsManager: ObservableObject {
         }
         
         sortRecordings()
-
+        createRecordingCells(recordings: recordings) //refresh when new added
+        
     }
     
     func removeRecording(url: URL?) {
@@ -72,14 +76,16 @@ class RecordingsManager: ObservableObject {
             recordings.remove(at: index)
         }
         
+        createRecordingCells(recordings: recordings) //refresh when removed
+        
     }
     
-    func refreshArray() { //deleting and setting array again to make a "refresh" of sort
-        print("refreshing the array")
-        let recordingsArr = recordings
-        recordings = [Recording]()
-        recordings = recordingsArr
-    }
+//    func refreshArray() { //deleting and setting array again to make a "refresh" of sort
+//        print("refreshing the array")
+//        let recordingsArr = recordings
+//        recordings = [Recording]()
+//        recordings = recordingsArr
+//    }
     
     private func sortRecordings() {
         
@@ -104,6 +110,36 @@ class RecordingsManager: ObservableObject {
         numberOfRecordings += 1
         print("updating recordings to \(numberOfRecordings)")
         defaults.set("numberOfRecordings", forKey: String(numberOfRecordings))
+        
+    }
+    
+    // MARK: Recording Cell functionality
+    
+    private func createRecordingCells(recordings: [Recording]) {
+        
+        recordingCells = [RecordingCell]()
+        
+        for recording in recordings {
+            let recordingCell = RecordingCell(isUnwraped: false, recording: recording)
+            recordingCells.append(recordingCell)
+        }
+        
+        
+        print("recording cells are \(recordingCells)")
+        
+    }
+    
+    func setUnwrappedFor(_ index: Int) {
+        
+        recordingCells[index].isUnwraped = true
+        
+    }
+    
+    func refreshRecordingCells() { //resets isUnwraped for all cells
+        
+        for i in 0..<recordingCells.count {
+            recordingCells[i].isUnwraped = false
+        }
         
     }
     
