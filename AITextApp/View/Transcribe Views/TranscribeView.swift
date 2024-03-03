@@ -27,7 +27,9 @@ struct TranscribeView: View {
             }
             .padding(.horizontal, 15)
             .padding(.vertical, 10)
-            
+            .onAppear {
+                transcribeViewModel.setSelectedRecording(selectedRecording)
+            }
         }
     }
 }
@@ -77,8 +79,6 @@ struct PlayerView: View {
         }
         .padding(.vertical, 15)
         .background(Color(.systemGray5))
-        .onAppear {
-        }
     }
     
 }

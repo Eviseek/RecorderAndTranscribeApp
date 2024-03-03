@@ -6,63 +6,46 @@
 //
 
 import Foundation
+import Alamofire
 
-class WhisperManager {
+class WhisperManager: ObservableObject {
     
     static let shared = WhisperManager()
     
-    var secretKey = "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"
+    var secretKey = ""
     
     private init() {}
     
     
-    func fetchData(recording: Recording, completion: @escaping () -> ()) {
+    func fetchData(recording: Recording, completion: @escaping (WhisperResponse?, AFError?) -> ()) {
+        
+        print("fetch data")
+        
+        if recording.durationSec > 15 { //for testing purposes, so I don't send recording over 15 seconds
+            print("recording too long")
+            return
+        }
         
         let url = URL(string: "https://api.openai.com/v1/audio/transcriptions")
         
         guard let url = url else { return }
         
-        let boundary = UUID().uuidString
+        guard let recordingURL = recording.url else { return }
         
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("Bearer \(secretKey)", forHTTPHeaderField: "Authorization")
-        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type") //TODO: add boundary?
+        let headers: HTTPHeaders = [
+            "Authorization": "Bearer \(secretKey)",
+            "Content-Type" : "multipart/form-data"
+        ]
         
-        
-        var data = Data()
-        
-        //data.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
-        //data.append("Content-Disposition:form-data; name=\"audiofile\"; filename=\"\(recording.url?.lastPathComponent)\"\r\n".data(using: .utf8)!)
-      //  data.append("Content-Type: audiofile/m4a\r\n\r\n".data(using: .utf8)!)
-        data.append("file=\(recording.url)".data(using: .utf8)!)
-        data.append("model=whiper-1".data(using: .utf8)!)
-     //  data.append(image.pngData()!)
-    //    data.append("Content-Disposition:form-data; name=\"audiofile\"; filename=\"audio.m4a\"\r\n\r\n")
-        
-     //   request.httpBody?.append(data)
-    
-        
-        URLSession.shared.uploadTask(with: request, from: data) { data, response, error in
-            guard let data = data else {
-                //failure
-                completion()
-                return
-            }
-            
-            print("my returned data are \(data)")
-            
-            do {
-              //  let transcription = try JSONDecoder().decode(<#T##type: Decodable.Protocol##Decodable.Protocol#>, from: data)
-                //return data
-            } catch {
-                //return error
-            }
-            
-            completion()
-            
+        AF.upload(multipartFormData: { multipartFormData in
+            multipartFormData.append(recordingURL, withName: "file")
+            multipartFormData.append(Data("whisper-1".utf8), withName: "model")
+        }, to: url, method: .post, headers: headers)
+        .responseDecodable(of: WhisperResponse.self) { response in
+            print("my response is \(response.result)")
+            completion(response.value, response.error)
         }
-        .resume()
+        
     }
     
     

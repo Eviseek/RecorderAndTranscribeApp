@@ -28,6 +28,8 @@
 		DD3A09442B8A654000BA4E63 /* RecordingCellsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD3A09432B8A654000BA4E63 /* RecordingCellsManager.swift */; };
 		DD3A09462B8A84DC00BA4E63 /* AudioState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD3A09452B8A84DC00BA4E63 /* AudioState.swift */; };
 		DD3A094D2B8BDB1400BA4E63 /* TranscribeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD3A094C2B8BDB1400BA4E63 /* TranscribeView.swift */; };
+		DD69A80E2B94D44F001C9017 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = DD69A80D2B94D44F001C9017 /* Alamofire */; };
+		DD69A8112B94E879001C9017 /* WhisperResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD69A8102B94E879001C9017 /* WhisperResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +75,7 @@
 		DD3A09432B8A654000BA4E63 /* RecordingCellsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingCellsManager.swift; sourceTree = "<group>"; };
 		DD3A09452B8A84DC00BA4E63 /* AudioState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioState.swift; sourceTree = "<group>"; };
 		DD3A094C2B8BDB1400BA4E63 /* TranscribeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscribeView.swift; sourceTree = "<group>"; };
+		DD69A8102B94E879001C9017 /* WhisperResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhisperResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD69A80E2B94D44F001C9017 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -183,8 +187,8 @@
 		DD3327D42B83E59D008C573F /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				DD3327D22B83E596008C573F /* Recording.swift */,
-				DD3A09412B8A64F400BA4E63 /* RecordingCell.swift */,
+				DD69A80F2B94E7E9001C9017 /* App Models */,
+				DD69A8102B94E879001C9017 /* WhisperResponse.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -227,6 +231,15 @@
 			path = Enums;
 			sourceTree = "<group>";
 		};
+		DD69A80F2B94E7E9001C9017 /* App Models */ = {
+			isa = PBXGroup;
+			children = (
+				DD3327D22B83E596008C573F /* Recording.swift */,
+				DD3A09412B8A64F400BA4E63 /* RecordingCell.swift */,
+			);
+			path = "App Models";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -243,6 +256,9 @@
 			dependencies = (
 			);
 			name = AITextApp;
+			packageProductDependencies = (
+				DD69A80D2B94D44F001C9017 /* Alamofire */,
+			);
 			productName = AITextApp;
 			productReference = DD2206E42B8234ED002FD181 /* AITextApp.app */;
 			productType = "com.apple.product-type.application";
@@ -315,6 +331,9 @@
 				Base,
 			);
 			mainGroup = DD2206DB2B8234ED002FD181;
+			packageReferences = (
+				DD69A80C2B94D44F001C9017 /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
 			productRefGroup = DD2206E52B8234ED002FD181 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -365,6 +384,7 @@
 				DD3A094D2B8BDB1400BA4E63 /* TranscribeView.swift in Sources */,
 				DD3A093B2B8A0E5A00BA4E63 /* Extensions.swift in Sources */,
 				DD3A093D2B8A284D00BA4E63 /* RecordingsManager.swift in Sources */,
+				DD69A8112B94E879001C9017 /* WhisperResponse.swift in Sources */,
 				DD0F42A92B8D20DB00DEF042 /* TranscribeViewModel.swift in Sources */,
 				DD2207122B8235DE002FD181 /* RecordingItemView.swift in Sources */,
 				DD2207172B823EFC002FD181 /* AVAudioManager.swift in Sources */,
@@ -708,6 +728,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		DD69A80C2B94D44F001C9017 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.8.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		DD69A80D2B94D44F001C9017 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DD69A80C2B94D44F001C9017 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = DD2206DC2B8234ED002FD181 /* Project object */;
 }

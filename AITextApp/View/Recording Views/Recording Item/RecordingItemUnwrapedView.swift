@@ -21,122 +21,116 @@ struct RecordingItemUnwrapedView: View {
     @State private var isPresented = false
     
     var body: some View {
-        
-        NavigationStack {
+        VStack {
             
-            VStack {
-                
-                HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(recording.title)
-                            .font(.system(size: 16))
-                            .bold()
-                        Text(recording.date.toStrDate())
-                            .font(.system(size: 14))
-                            .foregroundStyle(.gray)
-                    }
-                    
-                    Spacer()
-                    
-                    VStack(alignment: .trailing, spacing: 4) {
-                        
-                        VStack {
-                            Text("Transcribe")
-                                .foregroundStyle(.blue)
-                                .font(.system(size: 16))
-                        }
-                        .onTapGesture {
-                            isPresented = true
-           
-                        }
-                        .navigationDestination(isPresented: $isPresented, destination: {
-                            TranscribeView(selectedRecording: recording)
-                        })
-
-                        
-                        
-                    }
-                    
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(recording.title)
+                        .font(.system(size: 16))
+                        .bold()
+                    Text(recording.date.toStrDate())
+                        .font(.system(size: 14))
+                        .foregroundStyle(.gray)
                 }
                 
-                VStack {
-                    Slider(value: $timerManager.rawSecondsElapsed, in: 0...recording.durationSec)
-                    HStack {
-                        Text("\(timerManager.formattedTimeElapsed)")
-                            .font(.caption)
-                        Spacer()
-                    }
-                    .foregroundStyle(.gray)
-                }
-                .tint(.white)
-                .disabled(true)
-                .padding(.top, 10)
+                Spacer()
                 
-                HStack {
+                VStack(alignment: .trailing, spacing: 4) {
                     
                     VStack {
-                        Image(systemName: "scribble")
+                        Text("Transcribe")
+                            .foregroundStyle(.blue)
+                            .font(.system(size: 16))
+                    }
+                    .onTapGesture {
+                        isPresented = true
+       
+                    }
+                    .navigationDestination(isPresented: $isPresented, destination: {
+                        TranscribeView(selectedRecording: recording)
+                    })
+
+                }
+                
+            }
+            
+            VStack {
+                Slider(value: $timerManager.rawSecondsElapsed, in: 0...recording.durationSec)
+                HStack {
+                    Text("\(timerManager.formattedTimeElapsed)")
+                        .font(.caption)
+                    Spacer()
+                }
+                .foregroundStyle(.gray)
+            }
+            .tint(.white)
+            .disabled(true)
+            .padding(.top, 10)
+            
+            HStack {
+                
+                VStack {
+                    Image(systemName: "scribble")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 25, height: 25)
+                        .tint(.black)
+                }
+                
+                Spacer()
+                
+                if state == .start || state == .paused {
+                    VStack {
+                        Image(systemName: "play.fill")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 25, height: 25)
                             .tint(.black)
                     }
-                    
-                    Spacer()
-                    
-                    if state == .start || state == .paused {
-                        VStack {
-                            Image(systemName: "play.fill")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 25, height: 25)
-                                .tint(.black)
-                        }
-                        .onTapGesture {
-                            avAudioManager.playOrResumeRecording(for: recording.fileName, state: state)
-                            state = .playing
-                            timerManager.pauseResumeTimer(isPaused: false)
-                        }
-                    } else {
-                        VStack {
-                            Image(systemName: "pause.fill")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 25, height: 25)
-                                .tint(.black)
-                        }
-                        .onTapGesture {
-                            avAudioManager.pauseRecording()
-                            state = .paused
-                            timerManager.pauseResumeTimer(isPaused: true)
-                        }
+                    .onTapGesture {
+                        avAudioManager.playOrResumeRecording(for: recording.fileName, state: state)
+                        state = .playing
+                        timerManager.pauseResumeTimer(isPaused: false)
                     }
-                    
-                    Spacer()
-                    
+                } else {
                     VStack {
-                        Image(systemName: "trash")
+                        Image(systemName: "pause.fill")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 20, height: 20)
+                            .frame(width: 25, height: 25)
+                            .tint(.black)
                     }
-                    .foregroundStyle(.blue)
                     .onTapGesture {
-                        avAudioManager.deleteRecording(fileName: recording.fileName) { success in
-                            if success {
-                                recordingsManager.removeRecording(url: recording.url)
-                            }
+                        avAudioManager.pauseRecording()
+                        state = .paused
+                        timerManager.pauseResumeTimer(isPaused: true)
+                    }
+                }
+                
+                Spacer()
+                
+                VStack {
+                    Image(systemName: "trash")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 20, height: 20)
+                }
+                .foregroundStyle(.blue)
+                .onTapGesture {
+                    avAudioManager.deleteRecording(fileName: recording.fileName) { success in
+                        if success {
+                            recordingsManager.removeRecording(url: recording.url)
                         }
                     }
-                    
                 }
-                .onAppear {
-                    timerManager.setDuration(recording.durationSec)
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.top, 10)
                 
             }
+            .onAppear {
+                timerManager.setDuration(recording.durationSec)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.top, 10)
+            
         }
     }
 }

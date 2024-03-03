@@ -23,7 +23,8 @@ struct RecordingItemView: View {
     }
     
     var body: some View {
-        if !recordingsManager.recordingCells[cellIndex].isUnwraped {
+            
+            if !recordingsManager.recordingCells[cellIndex].isUnwraped {
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(recordingsManager.recordingCells[cellIndex].recording.title)
@@ -60,6 +61,7 @@ struct RecordingItemView: View {
                 }
             } else {
                 RecordingItemUnwrapedView(recording: recordingsManager.recordingCells[cellIndex].recording)
+                // .scaledToFit()
             }
     }
     

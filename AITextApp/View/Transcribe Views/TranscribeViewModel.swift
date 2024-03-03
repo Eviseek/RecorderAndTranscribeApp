@@ -25,9 +25,15 @@ class TranscribeViewModel: ObservableObject {
         
         guard let selectedRecording = selectedRecording else { return }
         
-        WhisperManager.shared.fetchData(recording: selectedRecording) {
-            print("all done")
-        }
+//        WhisperManager.shared.fetchData(recording: selectedRecording) { transcription, error in
+//            if error != nil {
+//                print("Something went wrong")
+//                return
+//            }
+//            if let transcription = transcription {
+//                print("this is my transcription \(transcription.text)")
+//            }
+//        }
     }
     
 }
